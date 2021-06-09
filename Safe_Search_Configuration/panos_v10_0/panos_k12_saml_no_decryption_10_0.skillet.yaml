@@ -1,0 +1,63 @@
+name: panos_k12_saml_no_decryption_10_0
+label: PAN_OS NGFW K-12 SAML No Decryption
+description: |-
+    reference K-12 SAML No Decryption configuration snippets
+type: panos
+labels:
+    collection:
+      - SLED 10.0 PAN-OS Snippets
+
+variables:
+
+snippets:
+  - name: SAML_custom_url_category
+    xpath: /config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/profiles/custom-url-category
+    element: |
+      <entry name="SAML Providers">
+        <type>URL List</type>
+        <list>
+          <member>accounts.google.com</member>
+          <member>login.microsoftonline.com</member>
+        </list>
+      </entry>
+
+  - name: SAML_decryption_policy
+    xpath: /config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/rulebase/decryption
+    elemenet: |
+      <entry name="No_Decrypt-SAML" uuid="2ac5bcbe-6650-4c51-9b33-e5850c9eb2fc">
+        <category>
+          <member>SAML Providers</member>
+        </category>
+        <service>
+          <member>any</member>
+        </service>
+        <type>
+          <ssl-forward-proxy/>
+        </type>
+        <from>
+          <member>Trust</member>
+        </from>
+        <to>
+          <member>any</member>
+        </to>
+        <source>
+          <member>any</member>
+        </source>
+        <destination>
+          <member>192.168.0.0/24</member>
+          <member>RFC1918_10_0_0_0</member>
+          <member>RFC1918_172.16.0.0</member>
+        </destination>
+        <source-user>
+          <member>any</member>
+        </source-user>
+        <source-hip>
+          <member>any</member>
+        </source-hip>
+        <destination-hip>
+          <member>any</member>
+        </destination-hip>
+        <action>no-decrypt</action>
+        <log-setting>default</log-setting>
+        <negate-destination>yes</negate-destination>
+      </entry>
