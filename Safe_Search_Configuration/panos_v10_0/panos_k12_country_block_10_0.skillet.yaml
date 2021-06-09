@@ -4,8 +4,8 @@ description: |-
     reference K-12 Source Country Traffic Blocking configuration snippets
 type: panos
 labels:
-    collection:
-      - SLED 10.0 PAN-OS Snippets
+  collection:
+    - SLED 10.0 PAN-OS Snippets
 
 variables:
   - name: CLOUD_EDL_MICROSOFT
@@ -28,40 +28,40 @@ snippets:
     xpath: /config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/external-list
     element: |
       <entry name="Cloud Platforms - Microsoft">
-      	<type>
-      	  <ip>
-      		<recurring>
-      		  <five-minute/>
-      		</recurring>
-      		<url>{{ CLOUD_EDL_MICROSOFT }}</url>
-      		<description>List of Microsoft Azure hosting IPs</description>
-      	  </ip>
-      	</type>
-        </entry>
-        <entry name="Cloud Platforms - Amazon">
-      	<type>
-      	  <ip>
-      		<recurring>
-      		  <five-minute/>
-      		</recurring>
-      		<description>List of Amazon hosted IPs</description>
-      		<url>{{ CLOUD_EDL_AMAZON }}</url>
-      	  </ip>
-      	</type>
-        </entry>
-        <entry name="Cloud Platforms - Google">
-      	<type>
-      	  <ip>
-      		<recurring>
-      		  <five-minute/>
-      		</recurring>
-      		<description>List of Google hosting IPs</description>
-      		<url>{{ CLOUD_EDL_GOOGLE }}</url>
-      	  </ip>
-      	</type>
-        </entry>
+        <type>
+          <ip>
+            <recurring>
+              <five-minute/>
+            </recurring>
+            <url>{{ CLOUD_EDL_MICROSOFT }}</url>
+            <description>List of Microsoft Azure hosting IPs</description>
+          </ip>
+        </type>
+      </entry>
+      <entry name="Cloud Platforms - Amazon">
+        <type>
+          <ip>
+            <recurring>
+              <five-minute/>
+            </recurring>
+            <description>List of Amazon hosted IPs</description>
+            <url>{{ CLOUD_EDL_AMAZON }}</url>
+          </ip>
+        </type>
+      </entry>
+      <entry name="Cloud Platforms - Google">
+        <type>
+          <ip>
+            <recurring>
+              <five-minute/>
+            </recurring>
+            <description>List of Google hosting IPs</description>
+            <url>{{ CLOUD_EDL_GOOGLE }}</url>
+          </ip>
+        </type>
+      </entry>
 
- - name: security_rules
+  - name: security_rules
     xpath: /config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/rulebase/security
     element: |
       <rules>
@@ -147,4 +147,4 @@ snippets:
             <member>Deny</member>
           </tag>
         </entry>
-    </rules>
+      </rules>

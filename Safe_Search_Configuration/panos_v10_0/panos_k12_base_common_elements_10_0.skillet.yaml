@@ -27,27 +27,27 @@ snippets:
     xpath: /config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/external-list
     element: |
       <entry name="Team Cymru Bogons IPv4">
-      <type>
-        <ip>
-          <url>http://www.team-cymru.org/Services/Bogons/fullbogons-ipv4.txt</url>
-          <recurring>
-            <hourly/>
-          </recurring>
-          <description>IPv4 addresses that should not be routed across the Internet. Either reserved IP address space or unassigned and may be used for malicious purposes. More information: http://www.team-cymru.com/bogon-reference.html</description>
-        </ip>
-      </type>
-      </entry>
+        <type>
+          <ip>
+            <url>http://www.team-cymru.org/Services/Bogons/fullbogons-ipv4.txt</url>
+            <recurring>
+              <hourly/>
+            </recurring>
+            <description>IPv4 addresses that should not be routed across the Internet. Either reserved IP address space or unassigned and may be used for malicious purposes. More information: http://www.team-cymru.com/bogon-reference.html</description>
+          </ip>
+        </type>
+        </entry>
       <entry name="Team Cymru Bogons IPv6">
-      <type>
-        <ip>
-          <recurring>
-            <hourly/>
-          </recurring>
-          <url>http://www.team-cymru.org/Services/Bogons/fullbogons-ipv6.txt</url>
-          <description>IPv6 addresses that should not be routed across the Internet. Either reserved IP address space or unassigned and may be used for malicious purposes. More information: http://www.team-cymru.com/bogon-reference.html</description>
-        </ip>
-      </type>
-    </entry>
+        <type>
+          <ip>
+            <recurring>
+              <hourly/>
+            </recurring>
+            <url>http://www.team-cymru.org/Services/Bogons/fullbogons-ipv6.txt</url>
+            <description>IPv6 addresses that should not be routed across the Internet. Either reserved IP address space or unassigned and may be used for malicious purposes. More information: http://www.team-cymru.com/bogon-reference.html</description>
+          </ip>
+        </type>
+      </entry>
 
   - name: profiles_custom_url_category
     xpath: /config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/profiles/custom-url-category
