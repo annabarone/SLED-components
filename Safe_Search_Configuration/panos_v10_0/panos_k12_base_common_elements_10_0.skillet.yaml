@@ -52,6 +52,9 @@ snippets:
   - name: profiles_custom_url_category
     xpath: /config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/profiles/custom-url-category
     element: |
+      <entry name="White-List">
+        <type>URL List</type>
+      </entry>
       <entry name="Black-List">
         <type>URL List</type>
         <list>
