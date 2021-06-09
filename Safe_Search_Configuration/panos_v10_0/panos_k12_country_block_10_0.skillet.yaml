@@ -1,0 +1,150 @@
+name: panos_k12_country_block_10_0
+label: PAN_OS NGFW K-12 SSL Decryption
+description: |-
+    reference K-12 Source Country Traffic Blocking configuration snippets
+type: panos
+labels:
+    collection:
+      - SLED 10.0 PAN-OS Snippets
+
+variables:
+  - name: CLOUD_EDL_MICROSOFT
+    description: Microsoft Cloud EDL URL
+    default: http://192.0.2.1
+    type_hint: text
+
+  - name: CLOUD_EDL_AMAZON
+    description: Amazon Cloud EDL URL
+    default: http://192.0.2.2
+    type_hint: text
+
+  - name: CLOUD_EDL_GOOGLE
+    description: Google Cloud EDL URL
+    default: http://192.0.2.3
+    type_hint: text
+
+snippets:
+  - name: external_list
+    xpath: /config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/external-list
+    element: |
+      <entry name="Cloud Platforms - Microsoft">
+      	<type>
+      	  <ip>
+      		<recurring>
+      		  <five-minute/>
+      		</recurring>
+      		<url>{{ CLOUD_EDL_MICROSOFT }}</url>
+      		<description>List of Microsoft Azure hosting IPs</description>
+      	  </ip>
+      	</type>
+        </entry>
+        <entry name="Cloud Platforms - Amazon">
+      	<type>
+      	  <ip>
+      		<recurring>
+      		  <five-minute/>
+      		</recurring>
+      		<description>List of Amazon hosted IPs</description>
+      		<url>{{ CLOUD_EDL_AMAZON }}</url>
+      	  </ip>
+      	</type>
+        </entry>
+        <entry name="Cloud Platforms - Google">
+      	<type>
+      	  <ip>
+      		<recurring>
+      		  <five-minute/>
+      		</recurring>
+      		<description>List of Google hosting IPs</description>
+      		<url>{{ CLOUD_EDL_GOOGLE }}</url>
+      	  </ip>
+      	</type>
+        </entry>
+
+ - name: security_rules
+    xpath: /config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/rulebase/security
+    element: |
+      <rules>
+        <entry name="Inbound Country Block">
+          <to>
+            <member>any</member>
+          </to>
+          <from>
+            <member>Untrust</member>
+          </from>
+          <source>
+            <member>CA</member>
+            <member>Cloud Platforms - Amazon</member>
+            <member>Cloud Platforms - Google</member>
+            <member>Cloud Platforms - Microsoft</member>
+            <member>MX</member>
+            <member>US</member>
+          </source>
+          <destination>
+            <member>any</member>
+          </destination>
+          <source-user>
+            <member>any</member>
+          </source-user>
+          <category>
+            <member>any</member>
+          </category>
+          <application>
+            <member>any</member>
+          </application>
+          <service>
+            <member>any</member>
+          </service>
+          <hip-profiles>
+            <member>any</member>
+          </hip-profiles>
+          <action>deny</action>
+          <negate-source>yes</negate-source>
+          <log-setting>default</log-setting>
+          <tag>
+            <member>Inbound</member>
+            <member>Deny</member>
+          </tag>
+        </entry>
+        <entry name="Outbound Country Block">
+          <to>
+            <member>Untrust</member>
+          </to>
+          <from>
+            <member>any</member>
+          </from>
+          <source>
+            <member>any</member>
+          </source>
+          <destination>
+            <member>CA</member>
+            <member>Cloud Platforms - Amazon</member>
+            <member>Cloud Platforms - Google</member>
+            <member>Cloud Platforms - Microsoft</member>
+            <member>MX</member>
+            <member>US</member>
+          </destination>
+          <source-user>
+            <member>any</member>
+          </source-user>
+          <category>
+            <member>any</member>
+          </category>
+          <application>
+            <member>any</member>
+          </application>
+          <service>
+            <member>any</member>
+          </service>
+          <hip-profiles>
+            <member>any</member>
+          </hip-profiles>
+          <action>drop</action>
+          <negate-destination>yes</negate-destination>
+          <log-setting>default</log-setting>
+          <tag>
+            <member>Outbound</member>
+            <member>Deny</member>
+          </tag>
+        </entry>
+    </rules>

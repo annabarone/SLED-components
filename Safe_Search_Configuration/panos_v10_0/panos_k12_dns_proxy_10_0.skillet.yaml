@@ -1,0 +1,289 @@
+name: panos_k12_dns_proxy_10_0
+label: PAN_OS NGFW K-12 DNS Proxy
+description: |-
+    reference K-12 DNS Proxy Safe Search configuration snippets
+type: panos
+labels:
+    collection:
+      - SLED 10.0 PAN-OS Snippets
+
+variables:
+  - name: TRUST_ZONE_INTERFACE
+    description: Trusted Interface reference
+    default: ethernet1/2
+    type_hint: text
+
+  - name: SANCTIONED_DNS_01_NAME
+    description: Safe Search Sanctioned External DNS Server Name
+    default: Google 1
+    type_hint: text
+
+  - name: SANCTIONED_DNS_01_IP
+    description: Safe Search Sanctioned External DNS Server IP Address
+    default: 8.8.8.8/32
+    type_hint: text
+
+  - name: SANCTIONED_DNS_02_NAME
+    description: Safe Search Sanctioned External DNS Server Name
+    default: Google 2
+    type_hint: text
+
+  - name: SANCTIONED_DNS_02_IP
+    description: Safe Search Sanctioned External DNS Server IP Address
+    default: 8.8.4.4/32
+    type_hint: text
+
+  - name: DNS_PROXY_IP_PRIMARY
+    description: Safe Search DNS Proxy Primary DNS Server IP Address
+    default: 8.8.8.8
+    type_hint: text
+
+  - name: DNS_PROXY_IP_SECONDARY
+    description: Safe Search DNS Proxy Secondary DNS Server IP Address
+    default: 8.8.4.4
+    type_hint: text
+
+  - name: GOOGLE_SAFE_SEARCH_IP
+    description: Google Safe Search Server IP
+    default: 216.239.38.120
+    type_hint: text
+
+  - name: BING_SAFE_SEARCH_IP
+    description: Bing Safe Search Server IP
+    default: 204.79.197.220
+    type_hint: text
+
+
+snippets:
+  - name: address
+    xpath: /config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/address
+    element: |
+      <entry name="{{ SANCTIONED_DNS_01_NAME }}">
+        <ip-netmask>{{ SANCTIONED_DNS_01_IP }}</ip-netmask>
+      </entry>
+      <entry name="{{ SANCTIONED_DNS_02_NAME }}">
+        <ip-netmask>{{ SANCTIONED_DNS_02_IP }}</ip-netmask>
+      </entry>
+
+  - name: address_group
+    xpath: /config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/address-group
+    element: |
+      <entry name="Sanctioned DNS Servers">
+        <static>
+          <member>{{ SANCTIONED_DNS_01_NAME }}</member>
+          <member>{{ SANCTIONED_DNS_02_NAME }}</member>
+        </static>
+      </entry>
+
+  - name: dns_proxy
+    xpath: /config/devices/entry[@name='localhost.localdomain']/network/dns-proxy
+    element: |
+      <entry name="DNS proxy with Safe Search">
+        <cache>
+          <max-ttl>
+            <enabled>yes</enabled>
+            <time-to-live>3600</time-to-live>
+          </max-ttl>
+          <enabled>yes</enabled>
+        </cache>
+        <default>
+          <primary>{{ DNS_PROXY_IP_PRIMARY }}</primary>
+          <secondary>{{ DNS_PROXY_IP_SECONDARY }}</secondary>
+        </default>
+        <tcp-queries>
+          <enabled>no</enabled>
+        </tcp-queries>
+        <static-entries>
+          <entry name="Google 1">
+            <address>
+              <member>{{ GOOGLE_SAFE_SEARCH_IP }}</member>
+            </address>
+            <domain>www.google.com</domain>
+          </entry>
+          <entry name="Google 2">
+            <address>
+              <member>{{ GOOGLE_SAFE_SEARCH_IP }}</member>
+            </address>
+            <domain>google.com</domain>
+          </entry>
+          <entry name="Bing 1">
+            <address>
+              <member>{{ BING_SAFE_SEARCH_IP }}</member>
+            </address>
+            <domain>www.bing.com</domain>
+          </entry>
+          <entry name="Bing 2">
+            <address>
+              <member>{{ BING_SAFE_SEARCH_IP }}</member>
+            </address>
+            <domain>bing.com</domain>
+          </entry>
+        </static-entries>
+        <enabled>yes</enabled>
+        <interface>
+          <member>{{ TRUST_ZONE_INTERFACE }}</member>
+        </interface>
+      </entry>
+
+  - name: security_rules
+    xpath: /config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/rulebase/security
+    element: |
+      <rules>
+        <entry name="Outbound DNS To Sanctioned Servers">
+          <profile-setting>
+            <group>
+              <member>default</member>
+            </group>
+          </profile-setting>
+          <to>
+            <member>any</member>
+          </to>
+          <from>
+            <member>Trust</member>
+          </from>
+          <source>
+            <member>any</member>
+          </source>
+          <destination>
+            <member>Sanctioned DNS Servers</member>
+          </destination>
+          <source-user>
+            <member>any</member>
+          </source-user>
+          <category>
+            <member>any</member>
+          </category>
+          <application>
+            <member>dns</member>
+          </application>
+          <service>
+            <member>application-default</member>
+          </service>
+          <hip-profiles>
+            <member>any</member>
+          </hip-profiles>
+          <action>allow</action>
+          <log-setting>default</log-setting>
+          <tag>
+            <member>Outbound</member>
+          </tag>
+        </entry>
+        <entry name="Outbound To FW DNS Proxy">
+          <profile-setting>
+            <group>
+              <member>Outbound</member>
+            </group>
+          </profile-setting>
+          <to>
+            <member>Trust</member>
+          </to>
+          <from>
+            <member>Trust</member>
+          </from>
+          <source>
+            <member>any</member>
+          </source>
+          <destination>
+            <member>FW - Trust</member>
+          </destination>
+          <source-user>
+            <member>any</member>
+          </source-user>
+          <category>
+            <member>any</member>
+          </category>
+          <application>
+            <member>dns</member>
+          </application>
+          <service>
+            <member>application-default</member>
+          </service>
+          <hip-profiles>
+            <member>any</member>
+          </hip-profiles>
+          <tag>
+            <member>Outbound</member>
+          </tag>
+          <action>allow</action>
+          <log-setting>default</log-setting>
+          <rule-type>intrazone</rule-type>
+          <description>Allow DNS Proxy</description>
+        </entry>
+        <entry name="Outbound DNS Block">
+          <to>
+            <member>any</member>
+          </to>
+          <from>
+            <member>Trust</member>
+          </from>
+          <source>
+            <member>any</member>
+          </source>
+          <destination>
+            <member>any</member>
+          </destination>
+          <source-user>
+            <member>any</member>
+          </source-user>
+          <category>
+            <member>any</member>
+          </category>
+          <application>
+            <member>dns</member>
+          </application>
+          <service>
+            <member>application-default</member>
+          </service>
+          <hip-profiles>
+            <member>any</member>
+          </hip-profiles>
+          <action>deny</action>
+          <log-setting>default</log-setting>
+          <tag>
+            <member>Outbound</member>
+            <member>Deny</member>
+          </tag>
+          <rule-type>interzone</rule-type>
+        </entry>
+        <entry name="Outbound Web Browsing Allowed Search Engines">
+          <profile-setting>
+            <group>
+              <member>default</member>
+            </group>
+          </profile-setting>
+          <to>
+            <member>any</member>
+          </to>
+          <from>
+            <member>any</member>
+          </from>
+          <source>
+            <member>any</member>
+          </source>
+          <destination>
+            <member>any</member>
+          </destination>
+          <source-user>
+            <member>any</member>
+          </source-user>
+          <category>
+            <member>any</member>
+          </category>
+          <application>
+            <member>google-base</member>
+            <member>ssl</member>
+            <member>web-browsing</member>
+          </application>
+          <service>
+            <member>application-default</member>
+          </service>
+          <hip-profiles>
+            <member>any</member>
+          </hip-profiles>
+          <action>allow</action>
+          <log-setting>default</log-setting>
+          <tag>
+            <member>Outbound</member>
+          </tag>
+        </entry>
+      </rules>

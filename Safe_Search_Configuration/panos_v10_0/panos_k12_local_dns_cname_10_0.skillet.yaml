@@ -1,0 +1,198 @@
+name: panos_k12_local_dns_cname_10_0
+label: PAN_OS NGFW K-12 Local DNS CNAME
+description: |-
+    reference K-12 Local DNS CNAME Safe Search configuration snippets
+type: panos
+labels:
+    collection:
+      - SLED 10.0 PAN-OS Snippets
+
+variables:
+  - name: LOCAL_DNS_01_NAME
+    description: Safe Search Local DNS Server Name
+    default: Local DNS 1
+    type_hint: text
+
+  - name: LOCAL_DNS_01_IP
+    description: Safe Search Local DNS Server IP Address
+    default: 192.0.2.1
+    type_hint: text
+
+
+snippets:
+  - name: address
+    xpath: /config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/address
+    element: |
+      <entry name="{{ LOCAL_DNS_01_NAME }}">
+        <ip-netmask>{{LOCAL_DNS_01_IP }}</ip-netmask>
+      </entry>
+
+  - name: address_group
+    xpath: /config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/address-group
+    element: |
+      <entry name="Local DNS Servers">
+        <static>
+          <member>{{ LOCAL_DNS_01_NAME }}</member>
+        </static>
+      </entry>
+
+  - name: security_rules
+    xpath: /config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/rulebase/security
+    element: |
+      <rules>
+        <entry name="Outbound DNS Internal Servers">
+          <profile-setting>
+            <group>
+              <member>default</member>
+            </group>
+          </profile-setting>
+          <to>
+            <member>Untrust</member>
+          </to>
+          <from>
+            <member>Trust</member>
+          </from>
+          <source>
+            <member>Local DNS Servers</member>
+          </source>
+          <destination>
+            <member>any</member>
+          </destination>
+          <source-user>
+            <member>any</member>
+          </source-user>
+          <category>
+            <member>any</member>
+          </category>
+          <application>
+            <member>dns</member>
+          </application>
+          <service>
+            <member>application-default</member>
+          </service>
+          <hip-profiles>
+            <member>any</member>
+          </hip-profiles>
+          <action>allow</action>
+          <log-setting>default</log-setting>
+          <tag>
+            <member>Outbound</member>
+          </tag>
+        </entry>
+        <entry name="Inbound DNS Internal Servers">
+          <profile-setting>
+            <group>
+              <member>default</member>
+            </group>
+          </profile-setting>
+          <to>
+            <member>Trust</member>
+          </to>
+          <from>
+            <member>Untrust</member>
+          </from>
+          <source>
+            <member>any</member>
+          </source>
+          <destination>
+            <member>Local DNS Servers</member>
+          </destination>
+          <source-user>
+            <member>any</member>
+          </source-user>
+          <category>
+            <member>any</member>
+          </category>
+          <application>
+            <member>dns</member>
+          </application>
+          <service>
+            <member>application-default</member>
+          </service>
+          <hip-profiles>
+            <member>any</member>
+          </hip-profiles>
+          <action>allow</action>
+          <log-setting>default</log-setting>
+          <tag>
+            <member>Inbound</member>
+          </tag>
+        </entry>
+        <entry name="Outbound DNS Block">
+          <to>
+            <member>any</member>
+          </to>
+          <from>
+            <member>Trust</member>
+          </from>
+          <source>
+            <member>any</member>
+          </source>
+          <destination>
+            <member>any</member>
+          </destination>
+          <source-user>
+            <member>any</member>
+          </source-user>
+          <category>
+            <member>any</member>
+          </category>
+          <application>
+            <member>dns</member>
+          </application>
+          <service>
+            <member>application-default</member>
+          </service>
+          <hip-profiles>
+            <member>any</member>
+          </hip-profiles>
+          <action>deny</action>
+          <log-setting>default</log-setting>
+          <tag>
+            <member>Outbound</member>
+            <member>Deny</member>
+          </tag>
+          <rule-type>interzone</rule-type>
+        </entry>
+        <entry name="Outbound Web Browsing Allowed Search Engines">
+          <profile-setting>
+            <group>
+              <member>default</member>
+            </group>
+          </profile-setting>
+          <to>
+            <member>any</member>
+          </to>
+          <from>
+            <member>any</member>
+          </from>
+          <source>
+            <member>any</member>
+          </source>
+          <destination>
+            <member>any</member>
+          </destination>
+          <source-user>
+            <member>any</member>
+          </source-user>
+          <category>
+            <member>any</member>
+          </category>
+          <application>
+            <member>google-base</member>
+            <member>ssl</member>
+            <member>web-browsing</member>
+          </application>
+          <service>
+            <member>application-default</member>
+          </service>
+          <hip-profiles>
+            <member>any</member>
+          </hip-profiles>
+          <action>allow</action>
+          <log-setting>default</log-setting>
+          <tag>
+            <member>Outbound</member>
+          </tag>
+        </entry>
+      </rules>
