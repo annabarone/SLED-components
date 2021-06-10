@@ -27,7 +27,7 @@ snippets:
 
   - name: chromebook_decryption_policy
     xpath: /config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/rulebase/decryption
-    elemenet: |
+    element: |
       <entry name="No_Decrypt-Chromebook" uuid="2db270f9-9449-4b14-b88e-55d9b9aae67f">
         <category>
           <member>Chromebook Bypass</member>
