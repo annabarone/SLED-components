@@ -10,6 +10,16 @@ labels:
 variables:
 
 snippets:
+  - name: RFC_address
+    xpath: /config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/address
+    element: |
+      <entry name="RFC1918_10_0_0_0">
+        <ip-netmask>10.0.0.0/8</ip-netmask>
+      </entry>
+      <entry name="RFC1918_172.16.0.0">
+        <ip-netmask>172.16.0.0/12</ip-netmask>
+      </entry>
+
   - name: SAML_custom_url_category
     xpath: /config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/profiles/custom-url-category
     element: |
