@@ -374,7 +374,7 @@ snippets:
     xpath: /config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/rulebase/decryption
     element: |
       <rules>
-          <entry name="NO-Decrypt Critical_Education_Sites" uuid="1d316f9d-d319-40a5-beaf-8714ed113a7d">
+          <entry name="NO-Decrypt Critical_Education_Sites">
           <category>
             <member>Critical_Education_Sites</member>
           </category>
