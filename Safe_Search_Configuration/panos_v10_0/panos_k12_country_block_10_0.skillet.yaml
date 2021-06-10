@@ -9,17 +9,17 @@ labels:
 
 variables:
   - name: CLOUD_EDL_MICROSOFT
-    description: Microsoft Cloud EDL URL
+    description: Country Traffic Block - Microsoft Cloud EDL URL
     default: http://192.0.2.1
     type_hint: text
 
   - name: CLOUD_EDL_AMAZON
-    description: Amazon Cloud EDL URL
+    description: Country Traffic Block - Amazon Cloud EDL URL
     default: http://192.0.2.2
     type_hint: text
 
   - name: CLOUD_EDL_GOOGLE
-    description: Google Cloud EDL URL
+    description: Country Traffic Block - Google Cloud EDL URL
     default: http://192.0.2.3
     type_hint: text
 

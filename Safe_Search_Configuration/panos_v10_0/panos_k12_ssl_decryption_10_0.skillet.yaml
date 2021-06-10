@@ -9,22 +9,22 @@ labels:
 
 variables:
   - name: SANCTIONED_DNS_01_NAME
-    description: Safe Search Sanctioned External DNS Server Name
+    description: Safe Search Enforcement - Sanctioned External DNS Server Name
     default: Google 1
     type_hint: text
 
   - name: SANCTIONED_DNS_01_IP
-    description: Safe Search Sanctioned External DNS Server IP Address
+    description: Safe Search Enforcement - Sanctioned External DNS Server IP Address
     default: 8.8.8.8/32
     type_hint: text
 
   - name: SANCTIONED_DNS_02_NAME
-    description: Safe Search Sanctioned External DNS Server Name
+    description: Safe Search Enforcement - Sanctioned External DNS Server Name
     default: Google 2
     type_hint: text
 
   - name: SANCTIONED_DNS_02_IP
-    description: Safe Search Sanctioned External DNS Server IP Address
+    description: Safe Search Enforcement - Sanctioned External DNS Server IP Address
     default: 8.8.4.4/32
     type_hint: text
 

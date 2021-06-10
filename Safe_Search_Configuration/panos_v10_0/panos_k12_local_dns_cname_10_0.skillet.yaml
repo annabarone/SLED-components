@@ -9,12 +9,12 @@ labels:
 
 variables:
   - name: LOCAL_DNS_01_NAME
-    description: Safe Search Local DNS Server Name
+    description: Safe Search Enforcement - Local DNS Server Name
     default: Local DNS 1
     type_hint: text
 
   - name: LOCAL_DNS_01_IP
-    description: Safe Search Local DNS Server IP Address
+    description: Safe Search Enforcement - Local DNS Server IP Address
     default: 192.0.2.1
     type_hint: text
 
