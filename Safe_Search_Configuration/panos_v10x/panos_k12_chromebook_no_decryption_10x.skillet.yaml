@@ -1,43 +1,37 @@
-name: panos_k12_saml_no_decryption_10_0
-label: PAN_OS NGFW K-12 SAML No Decryption
+name: panos_k12_chromebook_no_decryption_10x
+label: PAN_OS NGFW K-12 Chromebook No Decryption
 description: |-
-    reference K-12 SAML No Decryption configuration snippets
+    reference K-12 Chromebook No Decryption configuration snippets
 type: panos
 labels:
     collection:
-      - SLED 10.0 PAN-OS Snippets
+      - SLED 10.x PAN-OS Snippets
 
 variables:
 
 snippets:
-  - name: RFC_address
-    xpath: /config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/address
-    element: |
-      <entry name="RFC1918_10_0_0_0">
-        <ip-netmask>10.0.0.0/8</ip-netmask>
-      </entry>
-      <entry name="RFC1918_172.16.0.0">
-        <ip-netmask>172.16.0.0/12</ip-netmask>
-      </entry>
-
-  - name: SAML_custom_url_category
+  - name: chromebook_custom_url_category
     xpath: /config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/profiles/custom-url-category
     element: |
-      <entry name="SAML Providers">
+      <entry name="Chromebook Bypass">
         <type>URL List</type>
         <list>
-          <member>accounts.google.com</member>
-          <member>login.microsoftonline.com</member>
+          <member>play.google.com</member>
+          <member> edgestatic.com</member>
+          <member>*.googleapis.com</member>
+          <member>*.gvt1.com</member>
+          <member>*.gstatic.com/</member>
+          <member>android.clients.google.com</member>
         </list>
       </entry>
 
-  - name: SAML_decryption_policy
+  - name: chromebook_decryption_policy
     xpath: /config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/rulebase/decryption
     element: |
       <rules>
-        <entry name="No_Decrypt-SAML">
+        <entry name="No_Decrypt-Chromebook">
           <category>
-            <member>SAML Providers</member>
+            <member>Chromebook Bypass</member>
           </category>
           <service>
             <member>any</member>
@@ -49,15 +43,13 @@ snippets:
             <member>Trust</member>
           </from>
           <to>
-            <member>any</member>
+            <member>Untrust</member>
           </to>
           <source>
             <member>any</member>
           </source>
           <destination>
-            <member>192.168.0.0/24</member>
-            <member>RFC1918_10_0_0_0</member>
-            <member>RFC1918_172.16.0.0</member>
+            <member>any</member>
           </destination>
           <source-user>
             <member>any</member>
@@ -70,6 +62,5 @@ snippets:
           </destination-hip>
           <action>no-decrypt</action>
           <log-setting>default</log-setting>
-          <negate-destination>yes</negate-destination>
         </entry>
       </rules>

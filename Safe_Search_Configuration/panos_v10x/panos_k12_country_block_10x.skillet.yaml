@@ -1,11 +1,11 @@
-name: panos_k12_country_block_10_0
+name: panos_k12_country_block_10x
 label: PAN_OS NGFW K-12 SSL Decryption
 description: |-
     reference K-12 Source Country Traffic Blocking configuration snippets
 type: panos
 labels:
   collection:
-    - SLED 10.0 PAN-OS Snippets
+    - SLED 10.x PAN-OS Snippets
 
 variables:
   - name: CLOUD_EDL_MICROSOFT
