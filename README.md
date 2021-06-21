@@ -22,4 +22,4 @@ For additional help on creating Playlist Includes skillets, see the [Skillet Bui
 ### K-12 Skillet
 
 The Safe Search Configuration sub-skillet components were wrapped in a Quickplay Solution called the K-12 Skillet. 
-For more information on this, see the K-12 Skillet README.
+For more information on this, see the [K-12 Skillet README](https://github.com/PaloAltoNetworks/K12Skillet/blob/master/README.md).
