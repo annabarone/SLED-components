@@ -18,13 +18,22 @@ variables:
     default: 192.0.2.1
     type_hint: text
 
+  - name: zone_internet
+    description: internet zone name
+    default: internet
+    type_hint: text
+
+  - name: zone_internal
+    description: internal trust zone name
+    default: internal
+    type_hint: text
 
 snippets:
   - name: address
     xpath: /config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/address
     element: |
       <entry name="{{ LOCAL_DNS_01_NAME }}">
-        <ip-netmask>{{LOCAL_DNS_01_IP }}</ip-netmask>
+        <ip-netmask>{{ LOCAL_DNS_01_IP }}</ip-netmask>
       </entry>
 
   - name: address_group
@@ -47,10 +56,10 @@ snippets:
             </group>
           </profile-setting>
           <to>
-            <member>Untrust</member>
+            <member>{{ zone_internet }}</member>
           </to>
           <from>
-            <member>Trust</member>
+            <member>{{ zone_internal }}</member>
           </from>
           <source>
             <member>Local DNS Servers</member>
@@ -86,10 +95,10 @@ snippets:
             </group>
           </profile-setting>
           <to>
-            <member>Trust</member>
+            <member>{{ zone_internal }}</member>
           </to>
           <from>
-            <member>Untrust</member>
+            <member>{{ zone_internet }}</member>
           </from>
           <source>
             <member>any</member>
@@ -123,7 +132,7 @@ snippets:
             <member>any</member>
           </to>
           <from>
-            <member>Trust</member>
+            <member>{{ zone_internal }}</member>
           </from>
           <source>
             <member>any</member>

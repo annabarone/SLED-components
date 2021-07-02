@@ -8,9 +8,20 @@ labels:
       - SLED 10.x PAN-OS Snippets
 
 variables:
-  - name: TRUST_ZONE_INTERFACE
-    description: Trusted Interface reference
+  - name: intf_internal
+    description: internal Interface
     default: ethernet1/2
+    type_hint: dropdown
+    source: interface_names
+
+  - name: zone_internal
+    description: internal trust zone name
+    default: internal
+    type_hint: text
+
+  - name: internal_intf_ipaddr
+    description: internal interface ip address
+    default: 192.168.45.20/24
     type_hint: text
 
   - name: SANCTIONED_DNS_01_NAME
@@ -53,7 +64,6 @@ variables:
     default: 204.79.197.220
     type_hint: text
 
-
 snippets:
   - name: address
     xpath: /config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/address
@@ -63,6 +73,14 @@ snippets:
       </entry>
       <entry name="{{ SANCTIONED_DNS_02_NAME }}">
         <ip-netmask>{{ SANCTIONED_DNS_02_IP }}</ip-netmask>
+      </entry>
+
+    # Used in DNS Proxy as Destination
+  - name: address
+    xpath: /config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/address
+    element: |
+      <entry name="FW - Trust">
+        <ip-netmask>{{ internal_intf_ipaddr.split('/')[0] }}/32</ip-netmask>
       </entry>
 
   - name: address_group
@@ -121,7 +139,7 @@ snippets:
         </static-entries>
         <enabled>yes</enabled>
         <interface>
-          <member>{{ TRUST_ZONE_INTERFACE }}</member>
+          <member>{{ intf_internal }}</member>
         </interface>
       </entry>
 
@@ -139,7 +157,7 @@ snippets:
             <member>any</member>
           </to>
           <from>
-            <member>Trust</member>
+            <member>{{ zone_internal }}</member>
           </from>
           <source>
             <member>any</member>
@@ -175,10 +193,10 @@ snippets:
             </group>
           </profile-setting>
           <to>
-            <member>Trust</member>
+            <member>{{ zone_internal }}</member>
           </to>
           <from>
-            <member>Trust</member>
+            <member>{{ zone_internal }}</member>
           </from>
           <source>
             <member>any</member>
@@ -214,7 +232,7 @@ snippets:
             <member>any</member>
           </to>
           <from>
-            <member>Trust</member>
+            <member>{{ zone_internal }}</member>
           </from>
           <source>
             <member>any</member>

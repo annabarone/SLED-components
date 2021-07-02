@@ -14,6 +14,15 @@ variables:
     default: example.com
     type_hint: text
 
+  - name: zone_internet
+    description: internet zone name
+    default: internet
+    type_hint: text
+
+  - name: zone_internal
+    description: internal trust zone name
+    default: internal
+    type_hint: text
 
 snippets:
   - name: tag
@@ -286,89 +295,89 @@ snippets:
             <member>Deny</member>
           </tag>
         </entry>
-          {%- if YOUTUBE_FILTER == "yes" %}
-        <entry name="Outbound YouTube - District Approved List">
-          <profile-setting>
-            <group>
-              <member>default</member>
-            </group>
-          </profile-setting>
-          <to>
-            <member>any</member>
-          </to>
-          <from>
-            <member>Trust</member>
-          </from>
-          <source>
-            <member>any</member>
-          </source>
-          <destination>
-            <member>any</member>
-          </destination>
-          <source-user>
-            <member>any</member>
-          </source-user>
-          <category>
-            <member>YouTube - District Approved List</member>
-          </category>
-          <application>
-            <member>youtube-base</member>
-          </application>
-          <service>
-            <member>application-default</member>
-          </service>
-          <hip-profiles>
-            <member>any</member>
-          </hip-profiles>
-          <action>allow</action>
-          <log-setting>default</log-setting>
-          <tag>
-            <member>Outbound</member>
-          </tag>
-        </entry>
-        <entry name="Outbound Block YouTube">
-          <profile-setting>
-            <profiles>
-              <url-filtering>
-                <member>BlockYouTube</member>
-              </url-filtering>
-            </profiles>
-          </profile-setting>
-          <to>
-            <member>any</member>
-          </to>
-          <from>
-            <member>any</member>
-          </from>
-          <source>
-            <member>any</member>
-          </source>
-          <destination>
-            <member>any</member>
-          </destination>
-          <source-user>
-            <member>any</member>
-          </source-user>
-          <category>
-            <member>YouTubeWatch</member>
-          </category>
-          <application>
-            <member>youtube-base</member>
-          </application>
-          <service>
-            <member>application-default</member>
-          </service>
-          <hip-profiles>
-            <member>any</member>
-          </hip-profiles>
-          <action>allow</action>
-          <log-setting>default</log-setting>
-          <tag>
-            <member>Outbound</member>
-          </tag>
-        </entry>
-          {% endif %}
-      </rules>
+#          {%- if YOUTUBE_FILTER == "yes" %}
+#        <entry name="Outbound YouTube - District Approved List">
+#          <profile-setting>
+#            <group>
+#              <member>default</member>
+#            </group>
+#          </profile-setting>
+#          <to>
+#            <member>any</member>
+#          </to>
+#          <from>
+#            <member>Trust</member>
+#          </from>
+#          <source>
+#            <member>any</member>
+#          </source>
+#          <destination>
+#            <member>any</member>
+#          </destination>
+#          <source-user>
+#            <member>any</member>
+#          </source-user>
+#          <category>
+#            <member>YouTube - District Approved List</member>
+#          </category>
+#          <application>
+#            <member>youtube-base</member>
+#          </application>
+#          <service>
+#            <member>application-default</member>
+#          </service>
+#          <hip-profiles>
+#            <member>any</member>
+#          </hip-profiles>
+#          <action>allow</action>
+#          <log-setting>default</log-setting>
+#          <tag>
+#            <member>Outbound</member>
+#          </tag>
+#        </entry>
+#        <entry name="Outbound Block YouTube">
+#          <profile-setting>
+#            <profiles>
+#              <url-filtering>
+#                <member>BlockYouTube</member>
+#              </url-filtering>
+#            </profiles>
+#          </profile-setting>
+#          <to>
+#            <member>any</member>
+#          </to>
+#          <from>
+#            <member>any</member>
+#          </from>
+#          <source>
+#            <member>any</member>
+#          </source>
+#          <destination>
+#            <member>any</member>
+#          </destination>
+#          <source-user>
+#            <member>any</member>
+#          </source-user>
+#          <category>
+#            <member>YouTubeWatch</member>
+#          </category>
+#          <application>
+#            <member>youtube-base</member>
+#          </application>
+#          <service>
+#            <member>application-default</member>
+#          </service>
+#          <hip-profiles>
+#            <member>any</member>
+#          </hip-profiles>
+#          <action>allow</action>
+#          <log-setting>default</log-setting>
+#          <tag>
+#            <member>Outbound</member>
+#          </tag>
+#        </entry>
+#          {% endif %}
+#      </rules>
 
   - name: decryption_rules
     xpath: /config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/rulebase/decryption
@@ -385,10 +394,10 @@ snippets:
             <ssl-forward-proxy/>
           </type>
           <from>
-            <member>Trust</member>
+            <member>{{ zone_internal }}</member>
           </from>
           <to>
-            <member>Untrust</member>
+            <member>{{ zone_internet }}</member>
           </to>
           <source>
             <member>any</member>

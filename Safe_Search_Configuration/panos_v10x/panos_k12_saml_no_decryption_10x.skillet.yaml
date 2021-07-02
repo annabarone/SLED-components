@@ -8,6 +8,10 @@ labels:
       - SLED 10.x PAN-OS Snippets
 
 variables:
+  - name: zone_internal
+    description: internal trust zone name
+    default: internal
+    type_hint: text
 
 snippets:
   - name: RFC_address
@@ -46,7 +50,7 @@ snippets:
             <ssl-forward-proxy/>
           </type>
           <from>
-            <member>Trust</member>
+            <member>{{ zone_internal }}</member>
           </from>
           <to>
             <member>any</member>

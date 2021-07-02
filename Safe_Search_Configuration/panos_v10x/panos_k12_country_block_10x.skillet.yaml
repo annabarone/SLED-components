@@ -8,6 +8,11 @@ labels:
     - SLED 10.x PAN-OS Snippets
 
 variables:
+  - name: zone_internet
+    description: internet zone name
+    default: internet
+    type_hint: text
+
   - name: CLOUD_EDL_MICROSOFT
     description: Country Traffic Block - Microsoft Cloud EDL URL
     default: http://192.0.2.1
@@ -70,7 +75,7 @@ snippets:
             <member>any</member>
           </to>
           <from>
-            <member>Untrust</member>
+            <member>{{ zone_internet }}</member>
           </from>
           <source>
             <member>CA</member>
@@ -108,7 +113,7 @@ snippets:
         </entry>
         <entry name="Outbound Country Block">
           <to>
-            <member>Untrust</member>
+            <member>{{ zone_internet }}</member>
           </to>
           <from>
             <member>any</member>

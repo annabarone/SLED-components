@@ -8,6 +8,16 @@ labels:
       - SLED 10.x PAN-OS Snippets
 
 variables:
+  - name: zone_internet
+    description: internet zone name
+    default: internet
+    type_hint: text
+
+  - name: zone_internal
+    description: internal trust zone name
+    default: internal
+    type_hint: text
+
   - name: SANCTIONED_DNS_01_NAME
     description: Safe Search Enforcement - Sanctioned External DNS Server Name
     default: Google 1
@@ -64,7 +74,7 @@ snippets:
             <member>any</member>
           </to>
           <from>
-            <member>Trust</member>
+            <member>{{ zone_internal }}</member>
           </from>
           <source>
             <member>any</member>
@@ -98,7 +108,7 @@ snippets:
             <member>any</member>
           </to>
           <from>
-            <member>Trust</member>
+            <member>{{ zone_internal }}</member>
           </from>
           <source>
             <member>any</member>
@@ -190,7 +200,7 @@ snippets:
             <member>any</member>
           </from>
           <to>
-            <member>Untrust</member>
+            <member>{{ zone_internet }}</member>
           </to>
           <source>
             <member>any</member>

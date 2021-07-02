@@ -8,6 +8,16 @@ labels:
       - SLED 10.x PAN-OS Snippets
 
 variables:
+  - name: zone_internet
+    description: internet zone name
+    default: internet
+    type_hint: text
+
+  - name: zone_internal
+    description: internal trust zone name
+    default: internal
+    type_hint: text
+
 
 snippets:
   - name: chromebook_custom_url_category
@@ -40,10 +50,10 @@ snippets:
             <ssl-forward-proxy/>
           </type>
           <from>
-            <member>Trust</member>
+            <member>{{ zone_internal }}</member>
           </from>
           <to>
-            <member>Untrust</member>
+            <member>{{ zone_internet }}</member>
           </to>
           <source>
             <member>any</member>
