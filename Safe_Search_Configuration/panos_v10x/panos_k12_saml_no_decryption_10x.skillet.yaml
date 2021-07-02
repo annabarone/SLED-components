@@ -32,6 +32,7 @@ snippets:
         <list>
           <member>accounts.google.com</member>
           <member>login.microsoftonline.com</member>
+          <member>cloud-auth.us.apps.paloaltonetworks.com</member>
         </list>
       </entry>
 
